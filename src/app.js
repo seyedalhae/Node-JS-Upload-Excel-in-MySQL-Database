@@ -1,11 +1,14 @@
 const express = require("express");
 const fs = require("fs");
-const path = require("path");
+const { dirname } = require("path");
+const { fileURLToPath } = require("url");
 const bodyparser = require("body-parser");
 const readXlsxFile = require("read-excel-file/node");
 const mysql = require("mysql");
 const multer = require("multer");
 const app = express();
+
+// const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // express
 app.use(express.static("./public"));
@@ -36,7 +39,7 @@ const db = mysql.createConnection({
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
 		// cb(null, __basedir + "/uploads/");
-		cb(null, "/Node-JS-Upload-Excel-in-MySQL-Database/uploads/");
+		cb(null, "/nodejs-upload-excel-in-mysql-database/uploads/");
 	},
 	filename: (req, file, cb) => {
 		cb(null, file.fieldname + "-" + Date.now() + "-" + file.originalname);
@@ -54,7 +57,9 @@ app.get("/", (req, res) => {
 // express
 app.post("/import-excel", uploadFile.single("import-excel"), (req, res) => {
 	// importFileToDb(__basedir + "/uploads/" + req.file.filename);
-	importFileToDb("/Node-JS-Upload-Excel-in-MySQL-Database/uploads/" + req.file.filename);
+	importFileToDb(
+		"/nodejs-upload-excel-in-mysql-database/uploads/" + req.file.filename
+	);
 	console.log(res);
 	// console.log(__basedir);
 });
